@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  # find all the pods with a label of app: posts
+  selector:
+    matchLabels:
+      app: posts
+  # configuration to be applied to the pod
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          # problem because version is static
+          # image: quantacake/posts:0.0.5
+          # not specifying version assumes :latest
+          image: quantacake/posts:latest
