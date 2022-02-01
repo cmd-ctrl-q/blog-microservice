@@ -8,9 +8,10 @@ const posts = require("./data");
 const app = express();
 app.use(bodyParser.json());
 app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-  })
+  // cors({
+  //   origin: ["http://localhost:3000"],
+  // })
+  cors()
 );
 
 const handleEvent = (type, data) => {
@@ -64,7 +65,7 @@ app.listen(4002, async () => {
 
   try {
     // get a list of all events that have been emitted in the past.
-    const res = await axios.get("http://localhost:4005/events");
+    const res = await axios.get("http://event-bus-srv:4005/events");
 
     for (let event of res.data) {
       console.log("Processing event:", event.type);

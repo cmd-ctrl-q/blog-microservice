@@ -14,7 +14,7 @@ app.post("/events", async (req, res) => {
 
     // send status along with the comment to the event bus (broker)
     await axios
-      .post("http://localhost:4005/events", {
+      .post("http://event-bus-srv:4005/events", {
         type: "CommentModerated",
         data: {
           id: data.id,
