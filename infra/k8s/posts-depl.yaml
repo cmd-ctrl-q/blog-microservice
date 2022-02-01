@@ -20,3 +20,18 @@ spec:
           # image: quantacake/posts:0.0.5
           # not specifying version assumes :latest
           image: quantacake/posts:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    # direct traffic to label
+    app: posts
+  type: ClusterIP # this is the default
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
