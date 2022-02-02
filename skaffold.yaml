@@ -1,0 +1,62 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: quantacake/client
+      # updates pod when there is a change
+      context: client # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # take changed files in the path and copy directly to the pod
+          # if the path does not match, then skaffold will instead rebuild the entire image
+          # and update the deployment tied to it. 
+          - src: 'src/**/*.js'
+            dest: .
+    - image: quantacake/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: quantacake/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: quantacake/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: quantacake/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: quantacake/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .

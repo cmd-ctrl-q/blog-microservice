@@ -6,6 +6,7 @@ metadata:
     # feeds ingress controller routing rules by applying any routing
     # rules that contains this line.
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   # routing rules to apply so the ingress controller will know how to 
   # route the traffic to other pods.
@@ -14,7 +15,8 @@ spec:
     - host: posts.com
       http:
         paths:
-          - path: /posts
+          # listed from greatest importance to least importance
+          - path: /posts/create
             pathType: Prefix
             # send request to cluster ip service
             backend:
@@ -22,3 +24,24 @@ spec:
                 name: posts-clusterip-srv
                 port:
                   number: 4000
+          - path: /posts
+            pathType: Prefix
+            backend:
+              service:
+                name: query-srv
+                port:
+                  number: 4002
+          - path: /posts/?(.*)/comments # regex
+            pathType: Prefix
+            backend:
+              service:
+                name: comments-srv
+                port:
+                  number: 4001
+          - path: /?(.*) # match all paths
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000
