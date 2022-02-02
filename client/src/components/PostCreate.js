@@ -8,7 +8,7 @@ const PostCreate = () => {
     e.preventDefault();
 
     // send new post
-    await axios.post("http://posts.com/posts", { title });
+    await axios.post("http://posts.com/posts/create", { title });
 
     // reset title
     setTitle("");
